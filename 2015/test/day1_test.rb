@@ -26,6 +26,7 @@ class Day1Test < Advent::TestCase
   end
 
   def test_part2
-    # assert_equal 123, @solution.part2
+    assert_equal 1, @solution.part2(input: ")")
+    assert_equal 5, @solution.part2(input: "()())")
   end
 end

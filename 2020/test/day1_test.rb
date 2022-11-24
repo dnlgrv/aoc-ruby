@@ -14,7 +14,7 @@ class Day1Test < Advent::TestCase
     assert_equal 514579, @solution.part1(input: "1721\n979\n366\n299\n675\n1456")
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal 241861950, @solution.part2(input: "1721\n979\n366\n299\n675\n1456")
+  end
 end

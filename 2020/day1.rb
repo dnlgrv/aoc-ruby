@@ -6,18 +6,27 @@ class Day1 < Advent::Solution
   def part1(input: load_input)
     entries = prepare input
 
-    entries.reduce(nil) do |result, entry|
-      break result unless result.nil?
-
-      pair = entries.find do |other_entry|
-        entry + other_entry == 2020
+    entries.each do |entry|
+      entries.each do |other_entry|
+        if entry + other_entry == 2020
+          return entry * other_entry
+        end
       end
-
-      entry * pair if pair
     end
   end
 
   def part2(input: load_input)
+    entries = prepare input
+
+    entries.each do |entry|
+      entries.each do |other_entry|
+        entries.each do |another_entry|
+          if entry + other_entry + another_entry == 2020
+            return entry * other_entry * another_entry
+          end
+        end
+      end
+    end
   end
 
   private

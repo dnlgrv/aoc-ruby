@@ -17,7 +17,9 @@ class Day1Test < Advent::TestCase
     assert_equal 33583, @solution.part1(input: "100756")
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal 2, @solution.part2(input: "12")
+    assert_equal 966, @solution.part2(input: "1969")
+    assert_equal 50346, @solution.part2(input: "100756")
+  end
 end

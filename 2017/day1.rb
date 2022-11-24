@@ -16,12 +16,32 @@ class Day1 < Advent::Solution
   end
 
   def part2(input: load_input)
+    digits = prepare input, circular: false
+
+    length = digits.length
+    half_length = digits.length / 2
+
+    digits.each_with_index.reduce(0) do |total, (digit, index)|
+      offset_wrapped = (index + half_length) % length
+
+      if digit == digits[offset_wrapped]
+        total + digit
+      else
+        total
+      end
+    end
   end
 
   private
 
-  def prepare(input)
+  def prepare(input, circular: true)
     digits = input.chomp.chars.map(&:to_i)
-    digits << digits[0] # append the first digit to the end of the sequence
+
+    if circular
+      # append the first digit to the end of the sequence
+      digits << digits[0]
+    else
+      digits
+    end
   end
 end

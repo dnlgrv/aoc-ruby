@@ -11,7 +11,7 @@ class Day2Test < Advent::TestCase
   end
 
   def test_part1
-    assert_equal 3500, @solution.part1(input: "1,9,10,3,2,3,11,0,99,30,40,50", solve: false)
+    assert_equal 3500, @solution.part1(input: "1,9,10,3,2,3,11,0,99,30,40,50", noun: nil, verb: nil)
   end
 
   # def test_part2

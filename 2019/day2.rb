@@ -7,12 +7,12 @@ class Day2 < Advent::Solution
   MULTIPLY = 2
   EXIT = 99
 
-  def part1(input: load_input, solve: true)
+  def part1(input: load_input, noun: 12, verb: 2)
     memory = prepare input
 
-    if solve
-      memory[1] = 12
-      memory[2] = 2
+    if noun && verb
+      memory[1] = noun
+      memory[2] = verb
     end
 
     program = memory.each_with_index
@@ -41,6 +41,18 @@ class Day2 < Advent::Solution
   end
 
   def part2(input: load_input)
+    nouns = (0..99).to_a
+    verbs = (0..99).to_a
+
+    combinations = (nouns.repeated_combination(2) + verbs.repeated_combination(2)).uniq.to_a
+
+    combinations.each do |(noun, verb)|
+      result = part1(input: input, noun: noun, verb: verb)
+
+      if result == 19690720
+        return 100 * noun + verb
+      end
+    end
   end
 
   private

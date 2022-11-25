@@ -15,26 +15,25 @@ class Day2 < Advent::Solution
       memory[2] = verb
     end
 
-    program = memory.each_with_index
+    program = memory.to_enum
 
     loop do
-      instruction, index = program.next
+      instruction = program.next
       break if instruction == EXIT
 
       value, address = case instruction
       when ADD
-        instruction_parameters(memory, index) do |a, b|
+        instruction_parameters(program, memory) do |a, b|
           a + b
         end
 
       when MULTIPLY
-        instruction_parameters(memory, index) do |a, b|
+        instruction_parameters(program, memory) do |a, b|
           a * b
         end
       end
 
       memory[address] = value
-      3.times { program.next }
     end
 
     memory[0]
@@ -61,8 +60,8 @@ class Day2 < Advent::Solution
     input.split(",").map(&:to_i)
   end
 
-  def instruction_parameters(memory, index, &block)
-    address_a, address_b, output_address = memory[index + 1..index + 3]
+  def instruction_parameters(program, memory, &block)
+    address_a, address_b, output_address = program.next, program.next, program.next
 
     value = yield memory[address_a], memory[address_b]
 

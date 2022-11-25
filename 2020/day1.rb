@@ -4,29 +4,19 @@ require "advent"
 
 class Day1 < Advent::Solution
   def part1(input: load_input)
-    entries = prepare input
-
-    entries.each do |entry|
-      entries.each do |other_entry|
-        if entry + other_entry == 2020
-          return entry * other_entry
-        end
-      end
+    pair = prepare(input).to_a.permutation(2).find do |(a, b)|
+      a + b == 2020
     end
+
+    pair.inject(:*)
   end
 
   def part2(input: load_input)
-    entries = prepare input
-
-    entries.each do |entry|
-      entries.each do |other_entry|
-        entries.each do |another_entry|
-          if entry + other_entry + another_entry == 2020
-            return entry * other_entry * another_entry
-          end
-        end
-      end
+    trio = prepare(input).to_a.permutation(3).find do |(a, b, c)|
+      a + b + c == 2020
     end
+
+    trio.inject(:*)
   end
 
   private

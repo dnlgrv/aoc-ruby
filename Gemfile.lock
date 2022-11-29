@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    advent (0.1.5)
+      thor (~> 1.2)
+    thor (1.2.1)
+
+PLATFORMS
+  arm64-darwin-21
+
+DEPENDENCIES
+  advent
+
+BUNDLED WITH
+   2.3.22

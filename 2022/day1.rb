@@ -8,6 +8,7 @@ class Day1 < Advent::Solution
   end
 
   def part2(input: load_input)
+    prepare(input).map(&:sum).max(3).sum
   end
 
   private

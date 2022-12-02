@@ -7,6 +7,10 @@ class Day2 < Advent::Solution
   DRAW = 3
   LOSS = 0
 
+  ROCK = 1
+  PAPER = 2
+  SCISSORS = 3
+
   def part1(input: load_input)
     prepare(input).sum do |(opponent, shape)|
       shape_score = case shape
@@ -46,6 +50,41 @@ class Day2 < Advent::Solution
   end
 
   def part2(input: load_input)
+    prepare(input).sum do |(opponent, outcome)|
+      shape_score = case [opponent, outcome]
+      when ["A", "X"]
+        SCISSORS
+      when ["B", "X"]
+        ROCK
+      when ["C", "X"]
+        PAPER
+
+      when ["A", "Y"]
+        ROCK
+      when ["B", "Y"]
+        PAPER
+      when ["C", "Y"]
+        SCISSORS
+
+      when ["A", "Z"]
+        PAPER
+      when ["B", "Z"]
+        SCISSORS
+      when ["C", "Z"]
+        ROCK
+      end
+
+      round_score = case outcome
+      when "X"
+        LOSS
+      when "Y"
+        DRAW
+      when "Z"
+        WIN
+      end
+
+      shape_score + round_score
+    end
   end
 
   private

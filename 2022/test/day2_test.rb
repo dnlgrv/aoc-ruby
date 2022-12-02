@@ -17,7 +17,7 @@ C Z"
     assert_equal 15, @solution.part1(input: @input)
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal 12, @solution.part2(input: @input)
+  end
 end

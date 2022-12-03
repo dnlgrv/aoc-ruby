@@ -18,6 +18,12 @@ class Day3 < Advent::Solution
   end
 
   def part2(input: load_input)
+    prepare(input).each_slice(3).sum do |rucksacks|
+      rucksacks = rucksacks.map(&:chars)
+      duplicate_item = rucksacks.first.intersection(*rucksacks[1..]).first
+
+      priority duplicate_item
+    end
   end
    
   private

@@ -20,6 +20,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw"
     assert_equal 157, @solution.part1(input: @input)
   end
 
-  # def test_part2
-  # end
+  def test_part2
+    assert_equal 70, @solution.part2(input: @input)
+  end
 end

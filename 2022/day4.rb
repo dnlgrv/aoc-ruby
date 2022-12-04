@@ -4,12 +4,15 @@ require "advent"
 
 class Day4 < Advent::Solution
   def part1(input: load_input)
-    prepare(input).count do |pair|
-      pair[0].cover?(pair[1]) || pair[1].cover?(pair[0])
+    prepare(input).count do |(elf_a, elf_b)|
+      elf_a.cover?(elf_b) || elf_b.cover?(elf_a)
     end
   end
 
   def part2(input: load_input)
+    prepare(input).count do |(elf_a, elf_b)|
+      elf_a.to_a.intersection(elf_b.to_a).size > 0
+    end
   end
 
   private

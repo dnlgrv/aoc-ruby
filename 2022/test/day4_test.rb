@@ -20,7 +20,7 @@ class Day4Test < Advent::TestCase
     assert_equal 2, @solution.part1(input: @input)
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal 4, @solution.part2(input: @input)
+  end
 end

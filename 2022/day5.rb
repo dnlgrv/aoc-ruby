@@ -21,6 +21,21 @@ class Day5 < Advent::Solution
   end
 
   def part2(input: load_input)
+    ship, instructions = prepare(input)
+
+    instructions.each_with_object(ship) do |instruction, ship|
+      amount, from, to = instruction.match(/move ([0-9]+) from ([0-9]+) to ([0-9]+)/).captures
+
+      amount.to_i.times.map do
+        ship[from].pop
+      end.reverse.each do |crate|
+        ship[to] << crate
+      end
+
+      ship
+    end.map do |_, stack|
+      stack.last
+    end.join
   end
 
   private

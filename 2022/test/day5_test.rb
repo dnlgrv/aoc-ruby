@@ -24,7 +24,7 @@ move 1 from 1 to 2
     assert_equal "CMZ", @solution.part1(input: @input)
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal "MCD", @solution.part2(input: @input)
+  end
 end

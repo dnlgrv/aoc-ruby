@@ -37,7 +37,7 @@ $ ls
     assert_equal 95437, @solution.part1(input: @example_input)
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal 24933642, @solution.part2(input: @example_input)
+  end
 end

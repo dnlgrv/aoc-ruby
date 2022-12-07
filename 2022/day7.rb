@@ -4,36 +4,31 @@ require "advent"
 
 class Day7 < Advent::Solution
   def part1(input: load_input)
-    fs = FileSystem.new
     input = prepare(input).to_enum
 
-    loop do
-      line = input.next
-
-      case line
-      in /\$ cd (.*)$/
-        fs.cd line.split(" ").last
-
-      in /\$ ls$/
-        until input.peek.start_with?("$")
-          size, _ = input.next.split(" ")
-
-          if size == "dir"
-            fs.filesize 0
-          else
-            fs.filesize size.to_i
-          end
-        end
-      end
-    end
-
+    fs = build_filesystem input
     fs.recalculate!
+
     fs.values.filter do |size|
       size <= 100000
     end.sum
   end
 
   def part2(input: load_input)
+    input = prepare(input).to_enum
+
+    fs = build_filesystem input
+    fs.recalculate!
+
+    total_space = 70000000
+    free_space = total_space - fs[Pathname.new("/")]
+
+    space_required = 30000000
+    amount_required_to_free = space_required - free_space
+
+    fs.values.filter do |size|
+      size >= amount_required_to_free
+    end.min
   end
 
   class FileSystem < Hash
@@ -74,5 +69,31 @@ class Day7 < Advent::Solution
 
   def prepare(input)
     input.split("\n")
+  end
+
+  def build_filesystem(input)
+    fs = FileSystem.new
+
+    loop do
+      line = input.next
+
+      case line
+      in /\$ cd (.*)$/
+        fs.cd line.split(" ").last
+
+      in /\$ ls$/
+        until input.peek.start_with?("$")
+          size, _ = input.next.split(" ")
+
+          if size == "dir"
+            fs.filesize 0
+          else
+            fs.filesize size.to_i
+          end
+        end
+      end
+    end
+
+    fs
   end
 end

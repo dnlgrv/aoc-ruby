@@ -15,10 +15,12 @@ class Day8 < Advent::Solution
       row.each_with_index do |tree, x|
         next if x == 0 || x == (row.size - 1)
 
-        visible_from_left = row[...x].all? { |other_tree| other_tree < tree }
-        visible_from_right = row[(x + 1)..].all? { |other_tree| other_tree < tree }
-        visible_from_above = trees_transposed[x][...y].all? { |other_tree| other_tree < tree }
-        visible_from_below = trees_transposed[x][(y + 1)..].all? { |other_tree| other_tree < tree }
+        shorter = ->(other_tree) { other_tree < tree }
+
+        visible_from_left = row[...x].all? shorter
+        visible_from_right = row[(x + 1)..].all? shorter
+        visible_from_above = trees_transposed[x][...y].all? shorter
+        visible_from_below = trees_transposed[x][(y + 1)..].all? shorter
 
         if visible_from_left || visible_from_right || visible_from_above || visible_from_below
           forest[y][x] = 1

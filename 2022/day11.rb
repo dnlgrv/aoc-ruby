@@ -20,11 +20,31 @@ class Day11 < Advent::Solution
       end
     end
 
-    monkey_a, monkey_b = monkeys.sort_by { |m| -m.inspections }.take(2)
+    monkey_a, monkey_b = monkeys.sort_by(&:inspections).reverse
     monkey_a.inspections * monkey_b.inspections
   end
 
   def part2(input: load_input)
+    monkeys = prepare(input).map do |args|
+      Monkey.new(*args)
+    end
+
+    all_divisors = monkeys.map(&:divisor).reduce(:*)
+
+    (1..10_000).each do |round|
+      monkeys.each do |monkey|
+        monkey.items.size.times do
+          item = monkey.items.shift
+          item = monkey.inspect_item item
+          item = item % all_divisors
+
+          monkey.perform(item, monkeys)
+        end
+      end
+    end
+
+    monkey_a, monkey_b = monkeys.sort_by(&:inspections).reverse
+    monkey_a.inspections * monkey_b.inspections
   end
 
   private
@@ -37,7 +57,7 @@ class Day11 < Advent::Solution
         parse_id(id),
         parse_items(items),
         parse_operation(operation),
-        parse_tester(tester),
+        parse_divisor(tester),
         parse_action(truthy, falsey)
       ]
     end
@@ -69,10 +89,8 @@ class Day11 < Advent::Solution
     end
   end
 
-  def parse_tester(str)
-    str.lstrip.sub("Test: divisible by ", "").to_i.tap do |number|
-      return ->(item) { item % number == 0 }
-    end
+  def parse_divisor(str)
+    str.lstrip.sub("Test: divisible by ", "").to_i
   end
 
   def parse_action(truthy, falsey)
@@ -80,7 +98,7 @@ class Day11 < Advent::Solution
     false_monkey = falsey.lstrip.split(" ").last.to_i
 
     ->(item, monkeys) do
-      if @tester.call(item)
+      if item % @divisor == 0
         throw_item item, to: monkeys[true_monkey]
       else
         throw_item item, to: monkeys[false_monkey]
@@ -90,13 +108,13 @@ class Day11 < Advent::Solution
 end
 
 class Monkey
-  attr_reader :id, :inspections, :items
+  attr_reader :id, :inspections, :items, :divisor
 
-  def initialize(id, items, operation, tester, action)
+  def initialize(id, items, operation, divisor, action)
     @id = id
     @items = items
     @operation = operation
-    @tester = tester
+    @divisor = divisor
     @action = action
 
     @inspections = 0

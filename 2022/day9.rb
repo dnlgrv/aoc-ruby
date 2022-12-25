@@ -5,108 +5,168 @@ require "debug"
 
 class Day9 < Advent::Solution
   def part1(input: load_input)
-    knot = prepare(input).each_with_object(Knot.new) do |(direction, amount), knot|
-      puts "== #{direction}#{amount} =="
+    head = Head.new(0, 0)
+    tail = Knot.new("T", 0, 0, head)
 
-      amount.times do
-        case direction
-        in :U
-          knot.move_up
-        in :D
-          knot.move_down
-        in :L
-          knot.move_left
-        in :R
-          knot.move_right
+    prepare(input).each do |(instruction, amount)|
+      case instruction
+      when "U"
+        amount.times do
+          head.move_up
+          tail.move
         end
 
-        Debugger.draw 6, 5, knot.head, knot.tail
+      when "D"
+        amount.times do
+          head.move_down
+          tail.move
+        end
+
+      when "L"
+        amount.times do
+          head.move_left
+          tail.move
+        end
+
+      when "R"
+        amount.times do
+          head.move_right
+          tail.move
+        end
       end
     end
 
-    knot.tail_locations.size
+    tail.visits.size
   end
 
   def part2(input: load_input)
+    head = Head.new(0, 0)
+    knots = (1..9).reduce([]) do |arr, x|
+      arr << Knot.new(x.to_s, 0, 0, arr.last || head)
+    end
+
+    prepare(input).each do |(instruction, amount)|
+      case instruction
+      when "U"
+        amount.times do
+          head.move_up
+          knots.each(&:move)
+        end
+
+      when "D"
+        amount.times do
+          head.move_down
+          knots.each(&:move)
+        end
+
+      when "L"
+        amount.times do
+          head.move_left
+          knots.each(&:move)
+        end
+
+      when "R"
+        amount.times do
+          head.move_right
+          knots.each(&:move)
+        end
+      end
+    end
+
+    knots.last.visits.size
   end
 
   private
 
   def prepare(input)
-    input.split("\n").map do |line|
-      direction, amount = line.split
-      [direction.to_sym, amount.to_i]
+    input.lines(chomp: true).map do |line|
+      direction, amount = line.split " "
+
+      [direction, amount.to_i]
     end
   end
 end
 
 class Knot
-  attr_reader :head, :tail, :tail_locations
+  attr_reader :id, :position, :visits
 
-  def initialize
-    @head = [0, 0]
-    @previous_head = [0, 0]
+  def initialize(id, x, y, following)
+    @id = id
+    @following = following
+    @position = [x, y]
 
-    @tail = [0, 0]
-
-    @tail_locations = Set.new
-    @tail_locations.add [0, 0]
+    @visits = Set.new
+    @visits.add @position.dup
   end
 
-  def move_up
-    @previous_head = @head.dup
-    @head[1] += 1
-    move_tail
-  end
+  def move
+    return if adjacent?
 
-  def move_down
-    @previous_head = @head.dup
-    @head[1] -= 1
-    move_tail
-  end
+    if @following.position[0] > @position[0]
+      @position[0] += 1
+    elsif @following.position[0] < @position[0]
+      @position[0] -= 1
+    end
 
-  def move_left
-    @previous_head = @head.dup
-    @head[0] -= 1
-    move_tail
-  end
+    if @following.position[1] > @position[1]
+      @position[1] += 1
+    elsif @following.position[1] < @position[1]
+      @position[1] -= 1
+    end
 
-  def move_right
-    @previous_head = @head.dup
-    @head[0] += 1
-    move_tail
+    @visits.add @position.dup
   end
 
   private
 
-  def move_tail
-    return if tail_adjacent?
-    @tail = @previous_head
-    @tail_locations.add @tail.dup
-  end
-
-  def tail_adjacent?
-    (@head[0] - @tail[0]).abs <= 1 && (@head[1] - @tail[1]).abs <= 1
+  def adjacent?
+    (@following.position[0] - @position[0]).abs <= 1 && (@following.position[1] - @position[1]).abs <= 1
   end
 end
 
-class Debugger
-  def self.draw(width, height, head, tail)
-    height.times.map do |y|
-      width.times.map do |x|
-        case [x, y]
-        in ^head
-          "H"
-        in ^tail
-          "T"
-        else
-          "."
+class Head < Knot
+  def initialize(x, y)
+    super "H", x, y, nil
+  end
+
+  def move_up
+    @position[1] += 1
+  end
+
+  def move_down
+    @position[1] -= 1
+  end
+
+  def move_left
+    @position[0] -= 1
+  end
+
+  def move_right
+    @position[0] += 1
+  end
+end
+
+class Grid
+  def initialize(width, height)
+    @width = width
+    @height = height
+  end
+
+  def draw(knots = [])
+    print "\n"
+
+    (0...@height).to_a.reverse_each do |y|
+      (0...@width).each do |x|
+        knot = knots.find do |knot|
+          knot.position == [x, y]
         end
-      end.join("")
-    end.reverse.tap do |line|
-      puts line
+
+        print knot&.id || "."
+      end
+
+      print "\n"
     end
 
-    puts ""
+    print "\n"
   end
 end

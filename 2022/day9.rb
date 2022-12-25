@@ -5,43 +5,12 @@ require "debug"
 
 class Day9 < Advent::Solution
   def part1(input: load_input)
-    head = Head.new(0, 0)
-    tail = Knot.new("T", 0, 0, head)
-
-    prepare(input).each do |(instruction, amount)|
-      case instruction
-      when "U"
-        amount.times do
-          head.move_up
-          tail.move
-        end
-
-      when "D"
-        amount.times do
-          head.move_down
-          tail.move
-        end
-
-      when "L"
-        amount.times do
-          head.move_left
-          tail.move
-        end
-
-      when "R"
-        amount.times do
-          head.move_right
-          tail.move
-        end
-      end
-    end
-
-    tail.visits.size
+    part2(input: input, number_of_knots: 1)
   end
 
-  def part2(input: load_input)
+  def part2(input: load_input, number_of_knots: 9)
     head = Head.new(0, 0)
-    knots = (1..9).reduce([]) do |arr, x|
+    knots = (1..number_of_knots).reduce([]) do |arr, x|
       arr << Knot.new(x.to_s, 0, 0, arr.last || head)
     end
 

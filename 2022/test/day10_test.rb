@@ -5,11 +5,34 @@ require "minitest/autorun"
 
 require_relative "../day10"
 
-EXAMPLE_INPUT = "noop
-addx 3
-addx -5"
+class Day10Test < Advent::TestCase
+  def setup
+    @solution = Day10.new
+  end
 
-LARGER_EXAMPLE_INPUT = "addx 15
+  def test_part1
+    assert_equal 13140, @solution.part1(input: DATA.read)
+  end
+
+  def test_part2
+    expected_output = "
+##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######....."
+
+    actual_output, _err = capture_io do
+      @solution.part2(input: DATA.read)
+    end
+
+    assert_equal expected_output.strip, actual_output.strip
+  end
+end
+
+__END__
+addx 15
 addx -11
 addx 6
 addx -3
@@ -154,18 +177,4 @@ addx -6
 addx -11
 noop
 noop
-noop"
-
-class Day10Test < Advent::TestCase
-  def setup
-    @solution = Day10.new
-  end
-
-  def test_part1
-    assert_equal 13140, @solution.part1(input: LARGER_EXAMPLE_INPUT)
-  end
-
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
-end
+noop

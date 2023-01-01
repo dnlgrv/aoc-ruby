@@ -7,6 +7,37 @@ class Day12 < Advent::Solution
     grid = prepare(input)
     _, starting_point = grid.find { |_key, node| node.start? }
     _, end_point = grid.find { |_key, node| node.end? }
+
+    calculate_distance grid, starting_point, end_point
+  end
+
+  def part2(input: load_input)
+    grid = prepare(input)
+    possible_starting_points = grid.values.select(&:start?)
+    _, end_point = grid.find { |_key, node| node.end? }
+
+    possible_starting_points.map do |starting_point|
+      starting_point.distance = 0
+
+      grid.each_value do |node|
+        node.distance = nil unless node == starting_point
+      end
+
+      calculate_distance grid, starting_point, end_point
+    end.compact.min
+  end
+
+  private
+
+  def prepare(input)
+    input.lines(chomp: true).each_with_index.each_with_object({}) do |(line, y), grid|
+      line.chars.each_with_index do |char, x|
+        grid[[x, y]] = Node.new(char, x, y)
+      end
+    end
+  end
+
+  def calculate_distance(grid, starting_point, end_point)
     recents = [starting_point]
     distance = 1
 
@@ -30,19 +61,6 @@ class Day12 < Advent::Solution
     end
 
     end_point.distance
-  end
-
-  def part2(input: load_input)
-  end
-
-  private
-
-  def prepare(input)
-    input.lines(chomp: true).each_with_index.each_with_object({}) do |(line, y), grid|
-      line.chars.each_with_index do |char, x|
-        grid[[x, y]] = Node.new(char, x, y)
-      end
-    end
   end
 end
 
@@ -85,7 +103,7 @@ class Node
   end
 
   def start?
-    @letter == "S"
+    elevation == 0
   end
 
   def end?

@@ -6,12 +6,14 @@ require "minitest/autorun"
 require_relative "../day10"
 
 class Day10Test < Advent::TestCase
+  INPUT = DATA.read
+
   def setup
     @solution = Day10.new
   end
 
   def test_part1
-    assert_equal 13140, @solution.part1(input: DATA.read)
+    assert_equal 13140, @solution.part1(input: INPUT)
   end
 
   def test_part2
@@ -24,7 +26,7 @@ class Day10Test < Advent::TestCase
 #######.......#######.......#######....."
 
     actual_output, _err = capture_io do
-      @solution.part2(input: DATA.read)
+      @solution.part2(input: INPUT)
     end
 
     assert_equal expected_output.strip, actual_output.strip

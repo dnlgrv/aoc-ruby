@@ -5,7 +5,24 @@ require "minitest/autorun"
 
 require_relative "../day11"
 
-EXAMPLE_INPUT = "Monkey 0:
+class Day11Test < Advent::TestCase
+  INPUT = DATA.read
+
+  def setup
+    @solution = Day11.new
+  end
+
+  def test_part1
+    assert_equal 10605, @solution.part1(input: INPUT)
+  end
+
+  def test_part2
+    assert_equal 2713310158, @solution.part2(input: INPUT)
+  end
+end
+
+__END__
+Monkey 0:
   Starting items: 79, 98
   Operation: new = old * 19
   Test: divisible by 23
@@ -31,18 +48,4 @@ Monkey 3:
   Operation: new = old + 3
   Test: divisible by 17
     If true: throw to monkey 0
-    If false: throw to monkey 1"
-
-class Day11Test < Advent::TestCase
-  def setup
-    @solution = Day11.new
-  end
-
-  def test_part1
-    assert_equal 10605, @solution.part1(input: EXAMPLE_INPUT)
-  end
-
-  def test_part2
-    assert_equal 2713310158, @solution.part2(input: EXAMPLE_INPUT)
-  end
-end
+    If false: throw to monkey 1

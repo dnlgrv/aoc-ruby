@@ -11,7 +11,7 @@ class Day13 < Advent::Solution
   end
 
   def part1(input: load_input)
-    prepare(input).each_with_index.reduce([]) do |indices, ((packet_a, packet_b), index)|
+    prepare(input).each_slice(2).each_with_index.reduce([]) do |indices, ((packet_a, packet_b), index)|
       if correct_order? packet_a, packet_b
         indices << index + 1
       else
@@ -21,19 +21,40 @@ class Day13 < Advent::Solution
   end
 
   def part2(input: load_input)
+    with_dividers = prepare(input).concat([[[2]], [[6]]]).sort do |left, right|
+      correct_order?(left, right) ? -1 : 1
+    end
+
+    first_divider_index = with_dividers.find_index { _1 == [[2]] } + 1
+    second_divider_index = with_dividers.find_index { _1 == [[6]] } + 1
+
+    first_divider_index * second_divider_index
   end
 
-  def correct_order?(packet_a, packet_b)
-    return :equal if packet_a == packet_b
+  def correct_order?(left, right)
+    return nil if left.empty? && right.empty?
+    return true if left.empty?
+    return false if right.empty?
 
-    packet_a.each_with_index do |left, index|
-      right = packet_b[index]
+    left_head, *left_tail = left
+    right_head, *right_tail = right
 
-      say "Comparing #{left} vs #{right}"
-      result = compare_values left, right
-      say "  Result: #{result}"
+    say "Comparing: #{left_head} & #{right_head}"
 
-      return result unless result == :equal
+    case [left_head, right_head]
+    in [Integer, Integer]
+      return true if left_head < right_head
+      return false if left_head > right_head
+    else
+      result = correct_order? wrap(left_head), wrap(right_head)
+    end
+
+    say "  Result: #{result}"
+
+    if result.nil?
+      correct_order? left_tail, right_tail
+    else
+      result
     end
   end
 
@@ -44,28 +65,7 @@ class Day13 < Advent::Solution
   end
 
   def prepare(input)
-    input.split("\n\n").map do |lines|
-      packet_a, packet_b = lines.split("\n")
-      [eval(packet_a), eval(packet_b)]
-    end
-  end
-
-  def compare_values(left, right)
-    return false if right.nil?
-
-    # If both are integers we can compare.
-    # If the left is lower, we're in order.
-    # If the right is lower, we're not in order.
-    # If they're the same, continue checking other values.
-    if left.is_a?(Integer) && right.is_a?(Integer)
-      return true if left < right
-      return false if left > right
-      return :equal if left == right
-    end
-
-    if left.is_a?(Array) || right.is_a?(Array)
-      correct_order? wrap(left), wrap(right)
-    end
+    input.lines(chomp: true).map(&method(:eval)).compact
   end
 
   def wrap(object)

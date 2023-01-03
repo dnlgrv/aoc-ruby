@@ -9,7 +9,7 @@ class Day13Test < Advent::TestCase
   INPUT = DATA.read
 
   def setup
-    @solution = Day13.new
+    @solution = Day13.new(debug: false)
   end
 
   def test_part1

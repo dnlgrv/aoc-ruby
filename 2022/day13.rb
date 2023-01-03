@@ -5,7 +5,8 @@ require "advent"
 class Day13 < Advent::Solution
   attr_reader :debug
 
-  def initialize(debug = false)
+  def initialize(debug: false)
+    super()
     @debug = debug
   end
 

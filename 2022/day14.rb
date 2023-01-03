@@ -3,51 +3,72 @@
 require "advent"
 
 class Day14 < Advent::Solution
+  STARTING_POINT = [500, 0]
+  FLOOR_MARGIN = 500
+
   def part1(input: load_input)
     cavern = prepare(input)
 
-    sand = [500, 0]
-    cavern[sand] = "+"
+    current_sand = STARTING_POINT
+    cavern[current_sand] = "+"
     largest_y = cavern.keys.map(&:last).max
 
-    until sand[1] > largest_y # falling infinitely
-      new_sand = [sand[0], sand[1] + 1]
-      unless cavern.has_key?(new_sand) # below is clear
-        cavern.delete sand
-        cavern[new_sand] = "+"
-        sand = new_sand
-        next
-      end
-
-      new_sand = [sand[0] - 1, sand[1] + 1]
-      unless cavern.has_key?(new_sand) # down and left is clear
-        cavern.delete sand
-        cavern[new_sand] = "+"
-        sand = new_sand
-        next
-      end
-
-      new_sand = [sand[0] + 1, sand[1] + 1]
-      unless cavern.has_key?(new_sand) # down and right is clear
-        cavern.delete sand
-        cavern[new_sand] = "+"
-        sand = new_sand
-        next
-      end
-
-      # sand has settled so reset
-      sand = [500, 0]
-      cavern[sand] = "+"
+    until current_sand[1] > largest_y # falling infinitely
+      current_sand = move_sand cavern, current_sand
     end
 
-    print_cavern cavern
-    cavern.values.count { _1 == "+" } - 1 # the one that fell off
+    cavern.values.count { _1 == "o" }
   end
 
   def part2(input: load_input)
+    cavern = prepare(input)
+
+    smallest_x = cavern.keys.map(&:first).min
+    largest_x = cavern.keys.map(&:first).max
+    largest_y = cavern.keys.map(&:last).max
+
+    (smallest_x - FLOOR_MARGIN).upto(largest_x + FLOOR_MARGIN).each do |x|
+      cavern[[x, largest_y + 2]] = "#"
+    end
+
+    current_sand = STARTING_POINT
+    cavern[current_sand] = "+"
+
+    until cavern[STARTING_POINT] == "o" # settled at starting point
+      current_sand = move_sand cavern, current_sand
+    end
+
+    cavern.values.count { _1 == "o" }
   end
 
   private
+
+  def move_sand(cavern, sand)
+    new_sand = [sand[0], sand[1] + 1]
+    unless cavern.has_key?(new_sand) # below is clear
+      cavern.delete sand
+      cavern[new_sand] = "+"
+      return new_sand
+    end
+
+    new_sand = [sand[0] - 1, sand[1] + 1]
+    unless cavern.has_key?(new_sand) # down and left is clear
+      cavern.delete sand
+      cavern[new_sand] = "+"
+      return new_sand
+    end
+
+    new_sand = [sand[0] + 1, sand[1] + 1]
+    unless cavern.has_key?(new_sand) # down and right is clear
+      cavern.delete sand
+      cavern[new_sand] = "+"
+      return new_sand
+    end
+
+    # sand has settled so reset
+    cavern[sand] = "o"
+    STARTING_POINT
+  end
 
   def print_cavern(cavern)
     smallest_x = cavern.keys.map(&:first).min

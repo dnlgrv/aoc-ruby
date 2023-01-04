@@ -16,9 +16,9 @@ class Day15Test < Advent::TestCase
     assert_equal 26, @solution.part1(input: INPUT, y: 10)
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    assert_equal 56000011, @solution.part2(input: INPUT, max_xy: 20)
+  end
 end
 
 __END__

@@ -5,9 +5,7 @@ require "debug"
 
 class Day1 < Advent::Solution
   def part1(input: load_input)
-    numbers = []
-
-    input.lines(chomp: true).each do |line|
+    input.lines(chomp: true).map do |line|
       first_digit = line.chars.find do |c|
         digits.include? c
       end
@@ -16,16 +14,12 @@ class Day1 < Advent::Solution
         digits.include? c
       end
 
-      numbers << "#{first_digit}#{last_digit}".to_i
-    end
-
-    numbers.sum
+      "#{first_digit}#{last_digit}".to_i
+    end.sum
   end
 
   def part2(input: load_input)
-    numbers = []
-
-    input.lines(chomp: true).each do |line|
+    input.lines(chomp: true).map do |line|
       results = line.scan /#{digits.join("|")}|#{more_digits.join("|")}/
       first_digit = if index = more_digits.find_index(results.first)
                       digits[index]
@@ -40,10 +34,8 @@ class Day1 < Advent::Solution
                       results.last.first
                     end
 
-      numbers << "#{first_digit}#{last_digit}".to_i
-    end
-
-    numbers.sum
+      "#{first_digit}#{last_digit}".to_i
+    end.sum
   end
 
   private

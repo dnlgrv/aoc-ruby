@@ -33,10 +33,11 @@ class Day1 < Advent::Solution
                       results.first
                     end
 
-      last_digit = if index = more_digits.find_index(results.last)
+      results = line.reverse.scan /#{digits.join("|")}|#{more_digits.map(&:reverse).join("|")}/
+      last_digit = if index = more_digits.find_index(results.first.reverse)
                       digits[index]
                     else
-                      results.last
+                      results.first
                     end
 
       numbers << "#{first_digit}#{last_digit}".to_i

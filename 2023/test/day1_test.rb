@@ -20,7 +20,15 @@ treb7uchet
     assert_equal 142, @solution.part1(input:)
   end
 
-  # def test_part2
-  #   assert_equal 123, @solution.part2
-  # end
+  def test_part2
+    input = """two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen
+"""
+    assert_equal 281, @solution.part2(input:)
+  end
 end

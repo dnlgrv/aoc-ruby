@@ -23,11 +23,35 @@ class Day1 < Advent::Solution
   end
 
   def part2(input: load_input)
+    numbers = []
+
+    input.lines(chomp: true).each do |line|
+      results = line.scan /#{digits.join("|")}|#{more_digits.join("|")}/
+      first_digit = if index = more_digits.find_index(results.first)
+                      digits[index]
+                    else
+                      results.first
+                    end
+
+      last_digit = if index = more_digits.find_index(results.last)
+                      digits[index]
+                    else
+                      results.last
+                    end
+
+      numbers << "#{first_digit}#{last_digit}".to_i
+    end
+
+    numbers.sum
   end
 
   private
 
   def digits
-    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  end
+
+  def more_digits
+    ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
   end
 end

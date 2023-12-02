@@ -1,7 +1,7 @@
 require "advent"
 
 class Day2 < Advent::Solution
-  def part1(input: load_input)
+  def part_1(input: input_text)
     max_red = 12
     max_green = 13
     max_blue = 14
@@ -16,7 +16,7 @@ class Day2 < Advent::Solution
     end.sum
   end
 
-  def part2(input: load_input)
+  def part_2(input: input_text)
     input.lines(chomp: true).inject(0) do |total, line|
       game_total = {red: [], green: [], blue: []}
 
@@ -31,13 +31,12 @@ class Day2 < Advent::Solution
   end
 
   private
-
-  def over_max?(games, colour, max)
-    games.any? do |game|
-      game.split(", ").any? do |pull|
-        count, cube_colour = pull.split " "
-        cube_colour == colour && count.to_i > max
+    def over_max?(games, colour, max)
+      games.any? do |game|
+        game.split(", ").any? do |pull|
+          count, cube_colour = pull.split " "
+          cube_colour == colour && count.to_i > max
+        end
       end
     end
-  end
 end

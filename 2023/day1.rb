@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 require "advent"
 require "debug"
 
 class Day1 < Advent::Solution
-  def part1(input: load_input)
+  def part_1(input: input_text)
     input.lines(chomp: true).map do |line|
       first_digit = line.chars.find do |c|
         digits.include? c
@@ -18,7 +16,7 @@ class Day1 < Advent::Solution
     end.sum
   end
 
-  def part2(input: load_input)
+  def part_2(input: input_text)
     input.lines(chomp: true).map do |line|
       results = line.scan /#{digits.join("|")}|#{more_digits.join("|")}/
       first_digit = if index = more_digits.find_index(results.first)
@@ -39,12 +37,11 @@ class Day1 < Advent::Solution
   end
 
   private
+    def digits
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    end
 
-  def digits
-    ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-  end
-
-  def more_digits
-    ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
-  end
+    def more_digits
+      ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    end
 end

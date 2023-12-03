@@ -11,7 +11,7 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    advent (0.1.7)
+    advent (0.1.9)
       activesupport
       thor
       zeitwerk

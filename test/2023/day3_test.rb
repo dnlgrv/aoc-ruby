@@ -12,9 +12,9 @@ class Day3Test < Advent::TestCase
     assert_equal 4361, @solution.part_1(input: DATA.read.chomp)
   end
 
-  # def test_part_2
-  #   assert_equal 123, @solution.part_2
-  # end
+  def test_part_2
+    assert_equal 467835, @solution.part_2(input: DATA.read.chomp)
+  end
 end
 
 __END__

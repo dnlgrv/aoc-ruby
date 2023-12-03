@@ -5,7 +5,8 @@ class Day3 < Advent::Solution
     parts = []
 
     grid = input.lines(chomp: true).map do |line|
-      line.chars << "." # pad with extra column
+      # pad with extra column
+      line.chars << "."
     end
 
     # pad with extra rows
